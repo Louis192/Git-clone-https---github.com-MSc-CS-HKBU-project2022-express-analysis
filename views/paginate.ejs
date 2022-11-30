@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>All Bookings</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous" />
+</head>
+
+<body>
+    <div>
+        <% if(locals.deleteStatus) { %>
+            <h1>
+                <%= deleteMessage %>
+            </h1>
+            <% } %>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Email</th>
+                <th scope="col">Number of Tickets</th>
+                <th scope="col">Team</th>
+                <th scope="col">Super Hero</th>
+                <th scope="col">Payment</th>
+                <th scope="col" colspan="3" class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (var booking of bookings) { %>
+                <tr>
+                    <td>
+                        <%= booking.email %>
+                    </td>
+                    <td>
+                        <%= booking.numTickets %>
+                    </td>
+                    <td>
+                        <%= booking.team %>
+                    </td>
+                    <td>
+                        <%= booking.superhero %>
+                    </td>
+                    <td>
+                        <%= booking.payment %>
+                    </td>
+                    <td class="text-center">
+                    <form action="/bookings/read/<%= booking._id %>" method="get">
+                        <div class="d-grid gap-2 col-6 mx-auto">
+                            <button class="btn btn-primary" type="submit">Detail</button>
+                        </div>
+                    </form>
+                    </td>
+                    <td class="text-center">
+                        <form action="/bookings/update/<%= booking._id %>" method="get">
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" type="submit">Update</button>
+                            </div>
+                        </form>
+                    </td>
+                    <td class="text-center">
+                        <form action="/bookings/delete/<%= booking._id %>" method="POST">
+                            <div class="d-grid gap-2 col-6 mx-auto">
+                                <button class="btn btn-primary" type="submit">Delete</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
+    <% for (var i=1; i <=pages; i++) { %>
+        [<a href="/bookings/paginate?perPage=<%= perPage %>&page=<%= i %>">
+            <%= i %>
+        </a>]
+        <% } %>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>All Bookings</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous" />
+</head>
+
+<body>
+
+    <table id="bookingTable"></table>
+    <div id="links"></div>
+    <script>
+
+
+        async function fetchPage(page, perPage) {
+            var response = await fetch("/api/bookings?perPage=" + perPage + "&page=" + page);
+            if (response.ok) {
+                var data = await response.json();
+                //console.log(data);
+                var bookingsHTML = "";
+                for (var booking of data.bookings) {
+                    bookingsHTML += "<tr><td>" + booking._id + "</td><td>" + booking.numTickets + "</td></tr>"
+                }
+                document.getElementById("bookingTable").innerHTML = bookingsHTML;
+                var linksHTML = ""
+
+                for (var i = 1; i <= data.pages; i++) {
+
+                    // linksHTML += "<button onclick='fetchPage(" + i + ", 2)'>" + i + "</button>"
+                    linksHTML += `<button onclick='fetchPage(${i}, ${perPage})'>${i}</button>`
+                }
+
+                document.getElementById("links").innerHTML = linksHTML;
+            } else {
+                alert(response.statusText)
+            }
+        }
+        // fetchPage(1, 2);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        var perPage = Math.max(parseInt(urlParams.get("perPage")), 2) || 2;
+
+        fetchPage(1, perPage)
+
+
+    </script>
+
+</body>
+
+</html>

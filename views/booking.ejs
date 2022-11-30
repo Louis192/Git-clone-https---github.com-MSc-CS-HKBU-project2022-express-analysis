@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+    <%= booking.Faculty %>
+        <form action="/bookings/delete/<%= booking._id %>" method="post">
+            <button type="submit">Delete</button>
+        </form>
+</body>
+
+</html>

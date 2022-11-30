@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>All Bookings</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <table>
+    <% for (var booking of bookings) { %>
+      <tr>
+        <td>
+          <%= booking.Faculty %>
+        </td>
+        <td>
+          <%= booking.Salary %>
+        </td>
+      </tr>
+
+      <% } %>
+  </table>
+</body>
+
+</html>

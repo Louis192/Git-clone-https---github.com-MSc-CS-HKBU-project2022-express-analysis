@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+</head>
+
+<body>
+    <h1>Average Annual Salary Analysis </h1>
+
+    <form action="bookings" method="POST" onsubmit="updateBooking(event);">
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Academic Year</label>
+            <select name="Year" class="form-select" aria-label="Default select example"
+                onchange="YearSelected(this.value)">
+                <option selected>Click to open</option>
+                <option value="2009">2009</option>
+                <option value="2010">2010</option>
+                <option value="2011">2011</option>
+                <option value="2012">2012</option>
+                <option value="2013">2013</option>
+                <option value="2014">2014</option>
+                <option value="2015">2015</option>
+                <option value="2016">2016</option>
+                <option value="2017">2017</option>
+                <option value="2018">2018</option>
+                <option value="2019">2019</option>
+                <option value="2020">2020</option>
+            </select>
+        </div>
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Level Of Study</label>
+            <select name="Level" class="form-select" aria-label="Default select example"
+                onchange="LevelSelected(this.value)">
+                <option selected>Click to open</option>
+                <option value="Research Postgraduate">Research</option>
+                <option value="Sub degree">degree</option>
+                <option value="Taught Postgraduate">Postgraduate</option>
+                <option value="Undergraduate">Undergraduate</option>
+            </select>
+        </div>
+
+        <div class="row mb-3">
+            <label class="col-sm-2 col-form-label">Faculty Category</label>
+            <select name="Faculty" class="form-select" aria-label="Default select example"
+                onchange="FacultySelected(this.value)">
+                <option selected>Click to open</option>
+                <option value="Social Sciences">Sciences</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Medicine">Medicine</option>
+                <option value="Education">Education</option>
+                <option value="Sciences">Sciences</option>
+            </select>
+        </div>
+        <div class="row mb-3">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Average Salary(HKD,000)</label>
+            <div class="col-sm-10">
+                <input type="number" class="form-control" id="inputPassword3" min=100 max=10000 name="Salary">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-danger" onclick="deleteBooking()">Delete</button>
+    </form>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+
+
+    </script>
+    <script>
+        
+      
+
+        function YearSelected(Year) {
+            var Year= document.getElementById("Year");   
+        }
+        function LevelSelected(Level) {
+            var Level= document.getElementById("Level");   
+        }
+        function FacultySelected(Faculty) {
+            var Faculty = document.getElementById("Faculty");   
+        }
+       
+
+
+
+    </script>
+    <script>
+
+
+        async function fetchBooking() {
+            var response = await fetch("/api/bookings/" + id);
+            if (response.ok) {
+               
+                document.querySelector("#inputPassword3").value = data.Salary;
+                
+                document.querySelector("option[value='<%= booking.Year %>']").selected = true;
+                // YearSelected('<%= booking.Year%>')
+                
+                document.querySelector("option[value='<%= booking.Level %>']").selected = true;
+                // LevelSelected('<%= booking.Level%>')
+                document.querySelector("option[value='<%= booking.Faculty%>']").selected = true;
+                // FacultySelected('<%= booking.Faculty%>')
+            }
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id")
+        fetchBooking();
+
+        async function updateBooking(event) {
+
+            event.preventDefault();
+
+            var response = await fetch("/api/bookings/" + id, {
+                method: "put",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                // body: "team=Avengers&superhero=Hulk"
+                body: new URLSearchParams(new FormData(event.target))
+            });
+
+            if (response.ok) {
+                var text = await response.text();
+                alert(text);
+                location.assign("/bookings");
+            } else {
+                alert(response.statusText)
+            }
+        }
+
+        async function deleteBooking() {
+
+            var r = confirm("Confirm Delete?");
+
+            if (r) {
+
+                var response = await fetch("/api/bookings/" + id, {
+                    method: "delete",
+                });
+
+                if (response.ok) {
+                    alert("booking deleted");
+                    location.assign("/bookings")
+                } else {
+                    alert(response.statusText)
+                }
+            } else {
+                alert("cancelled");
+            }
+        }
+    </script>
+
+
+</body>
+
+</html>
